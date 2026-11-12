@@ -5,6 +5,9 @@ import { useApp } from '../app/context';
 import { useTheme } from '../app/Shell';
 import { NAV } from '../app/nav';
 import { HubHeader } from '../components/blocks';
+import { Duo, IconBadge, type Hue } from '../components/icons';
+
+const HUE: Record<string, Hue> = { '/app/digitise': 'violet', '/app/automation': 'violet', '/app/coach': 'teal', '/app/integrations': 'violet', '/app/billing': 'blue', '/app/marketing': 'rose', '/app/social': 'rose', '/app/insights': 'blue', '/app/improve': 'amber', '/app/discovery': 'teal', '/app/admin': 'green' };
 
 /** All features: every area as a tile (the owner's design), then support, appearance and sign out. */
 export default function More() {
@@ -19,16 +22,16 @@ export default function More() {
       <ul className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {tiles.map((n) => (
           <li key={n.to}>
-            <Link to={n.to} className="flex h-full min-h-[118px] flex-col rounded-[20px] border border-line bg-raised p-4 shadow-[0_8px_24px_-20px_rgb(var(--shadow)/0.4)] transition-[transform,background-color] duration-150 hover:-translate-y-0.5 hover:bg-surface sm:p-5">
-              <n.icon size={28} className="text-accent" strokeWidth={1.9} aria-hidden="true" />
+            <Link to={n.to} className="card flex h-full min-h-[124px] flex-col p-4 transition-transform duration-150 hover:-translate-y-0.5 sm:p-5">
+              <Duo icon={n.icon} size={32} hue={HUE[n.to] || 'blue'} />
               <span className="mt-3 text-[16px] font-bold leading-snug text-ink">{n.short}</span>
               <span className="mt-0.5 text-[13px] leading-snug text-muted">{n.desc}</span>
             </Link>
           </li>
         ))}
       </ul>
-      <a href="https://wa.me/2349049417103" target="_blank" rel="noreferrer" className="mt-6 flex items-center gap-4 rounded-[20px] border border-accent/20 bg-accent/[0.06] p-5 transition-colors hover:bg-accent/10">
-        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-raised text-accent shadow-sm"><Headphones size={24} aria-hidden="true" /></span>
+      <a href="https://wa.me/2349049417103" target="_blank" rel="noreferrer" className="card mt-6 flex items-center gap-4 p-5 transition-transform hover:-translate-y-px" style={{ backgroundImage: 'linear-gradient(120deg, rgb(var(--accent) / 0.10), rgb(var(--raised)) 70%)' }}>
+        <IconBadge icon={Headphones} size="lg" />
         <span className="min-w-0 flex-1"><span className="block text-[17px] font-bold">Get Support</span><span className="block text-[14px] text-muted">Chat with our team on WhatsApp.</span></span>
         <ChevronRight size={20} className="text-faint" aria-hidden="true" />
       </a>

@@ -3,6 +3,7 @@ import { Check, Lock } from 'lucide-react';
 import { useApp } from '../app/context';
 import { ActionButton, Badge, Dialog, ErrorState, LoadingBlock, PageHeader, useLoad, useToast } from '../components/ui';
 import { PLATFORMS } from './Grow';
+import { BrandTile } from '../components/icons';
 import type { SocialAccount, SocialPlatform } from '../../shared/types';
 
 const ASKS: Record<SocialPlatform, string[]> = {
@@ -30,8 +31,8 @@ export default function Social() {
       <PageHeader title="Social media accounts" lead="Connect each account through the platform’s own sign-in. You choose what Lab may do, and you can disconnect at any time." />
       <ul className="mt-6 grid gap-3 md:grid-cols-2">
         {data.map((s) => { const P = PLATFORMS[s.platform]; return (
-          <li key={s.platform} className="flex items-center gap-4 rounded-[18px] border border-line bg-raised p-4">
-            <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-[14px] ${s.status === 'connected' ? 'bg-accent text-white' : 'bg-ink/[0.06] text-muted'}`}><P.icon size={24} aria-hidden="true" /></span>
+          <li key={s.platform} className="card flex items-center gap-4 p-4">
+            <BrandTile platform={s.platform} size={48} muted={s.status !== 'connected'} />
             <div className="min-w-0 flex-1">
               <p className="text-[16px] font-semibold">{P.name}</p>
               <p className="truncate text-caption text-muted">{s.status === 'connected' ? `${s.handle}${s.followers ? ` · ${s.followers.toLocaleString()} followers` : ''}` : s.status === 'awaiting_platform_approval' ? 'Waiting for the platform to approve Oliskey Lab' : 'Not connected'}</p>

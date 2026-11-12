@@ -6,6 +6,7 @@ import './index.css';
 import { AppProvider, useApp } from './app/context';
 import { Shell } from './app/Shell';
 import { LoadingBlock, ToastProvider } from './components/ui';
+import { IconDefs } from './components/icons';
 import Landing from './pages/Landing';
 import { SignIn, SignUp } from './pages/Auth';
 
@@ -23,6 +24,7 @@ const Preview = lazy(() => import('./pages/Preview'));
 const Build = lazy(() => import('./pages/Build'));
 const Grow = lazy(() => import('./pages/Grow'));
 const More = lazy(() => import('./pages/More'));
+const Automation = lazy(() => import('./pages/Automation'));
 
 /** Areas of the app need a signed-in session (a real account or the demo). */
 const Private: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -34,6 +36,7 @@ const Private: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 const Root = () => (
   <AppProvider><ToastProvider>
+    <IconDefs />
     <Suspense fallback={<div className="page-x py-16"><LoadingBlock /></div>}><Outlet /></Suspense>
   </ToastProvider></AppProvider>
 );
@@ -50,6 +53,7 @@ const router = createBrowserRouter(createRoutesFromElements(
         <Route path="build" element={<Build />} />
         <Route path="grow" element={<Grow />} />
         <Route path="more" element={<More />} />
+        <Route path="automation" element={<Automation />} />
         <Route path="discovery" element={<Discovery />} />
         <Route path="studio" element={<Studio />} />
         <Route path="studio/:siteId" element={<Editor />} />

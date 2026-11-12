@@ -28,6 +28,7 @@ export interface DiscoveryAnswers {
   hasAnalytics?: 'yes' | 'no' | 'unsure';
   maintainer?: string;
   intent?: 'build' | 'connect' | 'both';
+  teamSize?: 'just me' | '2-5' | '6-20' | '20+';
   sector?: Sector;
 }
 export type Sector = 'restaurant' | 'retail' | 'school' | 'services' | 'beauty' | 'health' | 'realestate' | 'ngo' | 'other';
@@ -47,6 +48,7 @@ export interface Strategy {
   products: ProductRecommendation[];
   priorities: { title: string; detail: string }[];
   source: 'ai' | 'rules';
+  blueprint?: import('./blueprint').Blueprint;
 }
 
 /** A generated website: plain content, rendered by the site renderer with one of the themes. */

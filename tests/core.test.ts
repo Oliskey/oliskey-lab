@@ -45,3 +45,22 @@ describe('private address blocking', () => {
   it.each(['127.0.0.1', '10.1.2.3', '172.16.0.9', '192.168.1.1', '169.254.169.254', '100.64.0.1', '::1', 'fd00::1', 'fe80::1', '::ffff:127.0.0.1', '0.0.0.0'])('blocks %s', (ip) => expect(isPrivateAddress(ip)).toBe(true));
   it.each(['8.8.8.8', '104.16.1.1', '2606:4700::1111'])('allows %s', (ip) => expect(isPrivateAddress(ip)).toBe(false));
 });
+
+import { buildBlueprint } from '../shared/blueprint';
+describe('app blueprint and automations', () => {
+  it('gives a restaurant with staff and delivery four dashboards', () => {
+    const b = buildBlueprint({ businessName: 'A', whatYouDo: 'meals with delivery', sector: 'restaurant', teamSize: '6-20' });
+    expect(b.dashboards.map((d) => d.role)).toEqual(['Customer app', 'Kitchen dashboard', 'Delivery dashboard', 'Owner and admin dashboard']);
+  });
+  it('gives a one-person business no staff dashboards', () => {
+    const b = buildBlueprint({ businessName: 'B', whatYouDo: 'hair salon', teamSize: 'just me' });
+    expect(b.dashboards.map((d) => d.role)).toEqual(['Booking app', 'Owner dashboard']);
+  });
+  it('finds automations from what takes the owner’s time, each with steps', () => {
+    const b = buildBlueprint({ businessName: 'C', timeConsumers: ['Answering WhatsApp enquiries', 'Chasing payments'] });
+    const ids = b.automations.map((a) => a.id);
+    expect(ids).toEqual(expect.arrayContaining(['auto-reply', 'pay-remind', 'lead-alert']));
+    expect(b.automations.every((a) => a.steps.length >= 3 && a.needs.length >= 1)).toBe(true);
+  });
+  it('points schools to Oliskey School', () => { expect(buildBlueprint({ whatYouDo: 'primary school' }).existingProduct?.name).toBe('Oliskey School'); });
+});

@@ -4,6 +4,7 @@ import { ArrowRight, Check, Mic, MicOff, Pencil, Plus, X } from 'lucide-react';
 import { useApp } from '../app/context';
 import { ActionButton, Badge, ErrorState, LoadingBlock, PageHeader, Section, useToast } from '../components/ui';
 import type { DiscoveryAnswers, ProductRecommendation, Strategy } from '../../shared/types';
+import { Automations, Dashboards } from '../components/BlueprintView';
 
 type Q =
   | { key: keyof DiscoveryAnswers; ask: string; help?: string; kind: 'text' | 'long' | 'url'; optional?: boolean; placeholder?: string; when?: (a: DiscoveryAnswers) => boolean }
@@ -18,6 +19,7 @@ const QUESTIONS: Q[] = [
   { key: 'offers', ask: 'What products or services do you offer?', help: 'Add each one separately.', kind: 'list', placeholder: 'e.g. Small chops platter' },
   { key: 'idealCustomers', ask: 'Who are your ideal customers?', kind: 'long', optional: true, placeholder: 'e.g. Office workers and event planners' },
   { key: 'customerLocation', ask: 'Where are your customers?', kind: 'text', optional: true, placeholder: 'e.g. Lekki and Victoria Island, Lagos' },
+  { key: 'teamSize', ask: 'How many people work in the business, including you?', help: 'This tells Lab whether your staff need their own dashboards.', kind: 'one', options: [{ v: 'just me', l: 'Just me' }, { v: '2-5', l: '2 to 5' }, { v: '6-20', l: '6 to 20' }, { v: '20+', l: 'More than 20' }] },
   { key: 'howFound', ask: 'How do customers find you today?', kind: 'pick', optional: true, options: ['Word of mouth', 'Instagram', 'Facebook', 'WhatsApp', 'TikTok', 'Google', 'Walk-in', 'Markets and events'].map((l) => ({ v: l, l })) },
   { key: 'socials', ask: 'Which social media do you use for the business?', kind: 'pick', optional: true, options: ['Instagram', 'Facebook', 'WhatsApp Business', 'TikTok', 'YouTube', 'LinkedIn', 'X (Twitter)'].map((l) => ({ v: l, l })) },
   { key: 'hasWebsite', ask: 'Do you already have a website?', kind: 'one', options: YN },
@@ -34,7 +36,7 @@ const QUESTIONS: Q[] = [
   { key: 'intent', ask: 'Should Lab build something new or manage what you have?', kind: 'one', options: [{ v: 'build', l: 'Build new' }, { v: 'connect', l: 'Manage what I have' }, { v: 'both', l: 'Both' }], when: (a) => a.hasWebsite === 'yes' || (!!a.hasApp && a.hasApp !== 'no') },
 ];
 const asked = (a: DiscoveryAnswers) => QUESTIONS.filter((q) => !q.when || q.when(a));
-const shown = (v: unknown) => Array.isArray(v) ? v.join(', ') : ({ yes: 'Yes', no: 'No', unsure: 'Not sure', android: 'Android', ios: 'iPhone', both: 'Both', build: 'Build new', connect: 'Manage what I have' } as Record<string, string>)[String(v)] || String(v);
+const shown = (v: unknown) => Array.isArray(v) ? v.join(', ') : ({ 'just me': 'Just me', '2-5': '2 to 5', '6-20': '6 to 20', '20+': 'More than 20', yes: 'Yes', no: 'No', unsure: 'Not sure', android: 'Android', ios: 'iPhone', both: 'Both', build: 'Build new', connect: 'Manage what I have' } as Record<string, string>)[String(v)] || String(v);
 
 /** Voice answers through the browser's own speech recognition, where available (Chrome, Edge, Safari). */
 function useDictation(onText: (t: string) => void) {
@@ -130,6 +132,10 @@ export const Plan: React.FC<{ s: Strategy }> = ({ s }) => (
         ))}
       </ul>
     </Section>
+    {s.blueprint && (<>
+      <Section title={`Your app: ${s.blueprint.dashboards.length} dashboards`} lead="One for each kind of person who uses it, on the device they use."><Dashboards b={s.blueprint} /></Section>
+      <Section title={`What you can automate: ${s.blueprint.automations.length} jobs`} lead="Routine work that can run by itself. Each one is switched on only with your approval."><Automations b={s.blueprint} /></Section>
+    </>)}
     <Section title="Your first priorities">
       <ol className="panel divide-y divide-line">
         {s.priorities.map((p, i) => <li key={p.title} className="flex gap-4 px-5 py-4"><span className="tnum grid h-7 w-7 shrink-0 place-items-center rounded-full bg-accent/10 text-caption font-bold text-accent-ink">{i + 1}</span><div><p className="text-[15px] font-semibold">{p.title}</p><p className="mt-0.5 text-small text-muted">{p.detail}</p></div></li>)}

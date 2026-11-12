@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowUp, ArrowDown, Bell, Check, ChevronRight, History, Info, ShoppingCart, Target, TrendingUp, Users } from 'lucide-react';
 import { useApp } from '../app/context';
 import { ErrorState, LoadingBlock, Logo, fmtAgo, useLoad, useToast } from '../components/ui';
+import { Duo } from '../components/icons';
 import { Plan } from './Discovery';
 import type { FocusItem, Metrics } from '../../shared/types';
 
@@ -14,7 +15,9 @@ const HealthCard: React.FC<{ m: Metrics }> = ({ m }) => {
   const v = m.health; const r = 34; const c = 2 * Math.PI * r;
   return (
     <Link to="/app/control" className="group relative flex items-center gap-5 overflow-hidden rounded-[22px] bg-[linear-gradient(135deg,#0A2A8A_0%,#1F6BFF_60%,#4C8DFF_100%)] p-5 text-white shadow-[0_18px_40px_-20px_rgba(31,107,255,0.7)] sm:p-6">
-      <span aria-hidden="true" className="pointer-events-none absolute -right-10 -top-16 h-48 w-48 rounded-full bg-white/10 blur-2xl" />
+      <span aria-hidden="true" className="pointer-events-none absolute -right-10 -top-16 h-48 w-48 rounded-full bg-white/15 blur-2xl" />
+      <svg aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 h-20 w-full opacity-40" viewBox="0 0 400 80" preserveAspectRatio="none"><path d="M0 50 C80 20 160 70 240 40 S360 30 400 45 V80 H0Z" fill="rgba(255,255,255,0.18)" /><path d="M0 62 C90 40 170 80 260 56 S370 50 400 60 V80 H0Z" fill="rgba(255,255,255,0.12)" /></svg>
+      <span aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-[22px] shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]" />
       <svg viewBox="0 0 84 84" className="h-[84px] w-[84px] shrink-0 -rotate-90" aria-hidden="true">
         <circle cx="42" cy="42" r={r} fill="none" stroke="rgba(255,255,255,0.18)" strokeWidth="9" />
         <circle cx="42" cy="42" r={r} fill="none" stroke="#7FE3FF" strokeWidth="9" strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - (v ?? 0) / 100)} className="transition-[stroke-dashoffset] duration-700 ease-glide" />
@@ -34,9 +37,9 @@ const HealthCard: React.FC<{ m: Metrics }> = ({ m }) => {
 const Delta: React.FC<{ d: number | null }> = ({ d }) => d === null ? null : (
   <span className={`inline-flex items-center gap-0.5 text-[12px] font-bold ${d >= 0 ? 'text-good' : 'text-bad'}`}>{d >= 0 ? <ArrowUp size={13} aria-hidden="true" /> : <ArrowDown size={13} aria-hidden="true" />}{d >= 0 ? '+' : ''}{d}%<span className="sr-only"> this month</span></span>
 );
-const Tile: React.FC<{ icon: React.ElementType; value: React.ReactNode; label: string; delta: number | null; to: string; empty?: string }> = ({ icon: Icon, value, label, delta, to, empty }) => (
-  <Link to={to} className="flex flex-col rounded-[20px] border border-line bg-raised p-4 shadow-[0_8px_24px_-18px_rgb(var(--shadow)/0.35)] transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 sm:p-5">
-    <div className="flex items-start justify-between"><Icon size={24} className="text-accent" aria-hidden="true" /><Delta d={delta} /></div>
+const Tile: React.FC<{ icon: React.ElementType; value: React.ReactNode; label: string; delta: number | null; to: string; empty?: string }> = ({ icon, value, label, delta, to, empty }) => (
+  <Link to={to} className="card flex flex-col p-4 transition-transform duration-150 hover:-translate-y-0.5 sm:p-5">
+    <div className="flex items-start justify-between"><Duo icon={icon} size={28} /><Delta d={delta} /></div>
     <p className={`tnum mt-3 font-bold leading-none tracking-tight ${empty ? 'text-[15px] text-muted' : 'text-[26px] text-ink'}`}>{empty || value}</p>
     <p className="mt-1.5 text-[14px] text-muted">{label}</p>
   </Link>
@@ -45,7 +48,7 @@ const Tile: React.FC<{ icon: React.ElementType; value: React.ReactNode; label: s
 const Focus: React.FC<{ items: FocusItem[]; onToggle: (i: FocusItem) => void; limit?: number }> = ({ items, onToggle, limit = 3 }) => {
   const done = items.filter((i) => i.done).length;
   return (
-    <section className="rounded-[20px] border border-line bg-raised p-5 shadow-[0_8px_24px_-18px_rgb(var(--shadow)/0.35)]">
+    <section className="card p-5">
       <div className="flex items-baseline justify-between"><h2 className="text-[19px] font-bold tracking-tight">This Week’s Focus</h2><p className="text-[13px] text-muted">{done} of {items.length} done</p></div>
       <div className="mt-3 h-2 overflow-hidden rounded-full bg-ink/[0.07]" role="progressbar" aria-valuemin={0} aria-valuemax={items.length} aria-valuenow={done} aria-label="Weekly focus progress"><div className="h-full rounded-full bg-accent transition-[width] duration-500 ease-glide" style={{ width: `${(done / Math.max(1, items.length)) * 100}%` }} /></div>
       <ul className="mt-2 divide-y divide-line">
@@ -112,7 +115,7 @@ export default function Home() {
             <Tile icon={TrendingUp} value={m.revenue !== null ? naira(m.revenue) : null} label="Revenue" delta={m.revenueDelta} to="/app/integrations" empty={m.revenue === null ? 'Connect payments' : undefined} />
           </div>
           <div className="lg:col-span-7"><Focus items={focus} onToggle={toggle} /></div>
-          <section className="rounded-[20px] border border-line bg-raised p-5 lg:col-span-5">
+          <section className="card p-5 lg:col-span-5">
             <div className="flex items-baseline justify-between"><h2 className="text-[19px] font-bold tracking-tight">New enquiries</h2><Link to="/app/customers" className="text-[14px] font-semibold text-accent-ink">See all</Link></div>
             {newLeads.length ? <ul className="mt-2 divide-y divide-line">{newLeads.slice(0, 3).map((l) => <li key={l.id} className="py-3"><p className="text-[15px] font-semibold">{l.name} <span className="font-normal text-faint">· {l.source} · {fmtAgo(l.createdAt)}</span></p><p className="mt-0.5 line-clamp-1 text-small text-muted">{l.message}</p></li>)}</ul>
               : <p className="mt-3 text-small text-muted">No new enquiries. When customers use your website form, they appear here.</p>}
@@ -123,7 +126,7 @@ export default function Home() {
       {tab === 'week' && (
         <div className="enter mt-6 grid gap-4 lg:grid-cols-2">
           <Focus items={focus} onToggle={toggle} limit={10} />
-          <section className="rounded-[20px] border border-line bg-raised p-5">
+          <section className="card p-5">
             <h2 className="text-[19px] font-bold tracking-tight">What happened this week</h2>
             {week.length ? <ul className="mt-2 divide-y divide-line">{week.slice(0, 8).map((a) => <li key={a.id} className="flex gap-3 py-3 text-small"><History size={16} className="mt-0.5 shrink-0 text-faint" aria-hidden="true" /><div><p><span className="font-semibold">{a.action}</span> · {a.target}</p><p className="text-caption text-muted">{a.actor} · {fmtAgo(a.at)}</p></div></li>)}</ul>
               : <p className="mt-3 text-small text-muted">Nothing yet this week.</p>}
@@ -134,7 +137,7 @@ export default function Home() {
       {tab === 'plan' && (
         <div className="enter mt-6">
           {strategy ? <Plan s={strategy} /> : (
-            <div className="rounded-[20px] border border-line bg-raised p-6"><h2 className="text-[19px] font-bold">No plan yet</h2><p className="mt-1 text-small text-muted">Answer a few questions about your business and Lab writes your action plan.</p><Link to="/app/discovery" className="btn-primary mt-5">Start Business Discovery</Link></div>
+            <div className="card p-6"><h2 className="text-[19px] font-bold">No plan yet</h2><p className="mt-1 text-small text-muted">Answer a few questions about your business and Lab writes your action plan.</p><Link to="/app/discovery" className="btn-primary mt-5">Start Business Discovery</Link></div>
           )}
         </div>
       )}

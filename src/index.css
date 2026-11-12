@@ -47,7 +47,12 @@ body { @apply bg-page text-ink font-sans antialiased; font-feature-settings: 'cv
   .chip { @apply inline-flex min-h-[40px] items-center gap-2 rounded-control border border-line bg-raised px-4 text-[14px] font-medium text-ink transition-colors duration-150 hover:bg-surface; }
   .chip[aria-pressed='true'] { @apply border-accent bg-accent/10 text-accent-ink; }
 
-  .panel { @apply rounded-card border border-line bg-raised; }
+  .panel { @apply rounded-[20px] bg-raised; box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 0 0 1px rgb(var(--line) / 0.75), 0 14px 32px -22px rgb(var(--shadow) / 0.45); }
+  .dark .panel { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05), 0 0 0 1px rgb(var(--line)), 0 14px 32px -22px rgb(0 0 0 / 0.6); }
+  /* premium card: soft white with a hairline, an inner top light and a deep soft shadow (owner's approved look) */
+  .card { @apply rounded-[20px] bg-raised; background-image: linear-gradient(180deg, rgb(var(--raised)) 0%, rgb(var(--surface) / 0.55) 100%);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 0 0 1px rgb(var(--line) / 0.75), 0 14px 32px -22px rgb(var(--shadow) / 0.45); }
+  .dark .card { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05), 0 0 0 1px rgb(var(--line)), 0 14px 32px -22px rgb(0 0 0 / 0.6); }
   .glass { background: rgb(var(--glass) / var(--glass-alpha)); -webkit-backdrop-filter: blur(18px) saturate(1.6); backdrop-filter: blur(18px) saturate(1.6); box-shadow: inset 0 1px 0 rgb(var(--glass-edge) / 0.35), inset 0 0 0 1px rgb(var(--glass-edge) / 0.10), 0 10px 30px -14px rgb(var(--shadow) / 0.35); }
   .skeleton { @apply animate-pulse rounded-field bg-ink/[0.06]; }
 }

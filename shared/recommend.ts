@@ -2,6 +2,7 @@
 // what it costs outside Oliskey. Used directly in the demo, and by the server whenever the AI is unavailable.
 // The rule of the spec: never push a small business into an expensive native app it does not need.
 import type { DiscoveryAnswers, ProductRecommendation, Sector, Strategy } from './types';
+import { buildBlueprint } from './blueprint';
 
 const has = (list: string[] | undefined, ...words: string[]) => (list || []).some((x) => words.some((w) => x.toLowerCase().includes(w)));
 const text = (a: DiscoveryAnswers) => [a.whatYouDo, a.challenges, a.idealCustomers, ...(a.offers || []), ...(a.goals || [])].join(' ').toLowerCase();
@@ -69,5 +70,5 @@ export function recommend(a: DiscoveryAnswers): Strategy {
   const summary = journey === 'connect'
     ? `${name} already has a digital presence. Oliskey Lab will connect it, find what is holding customers back and improve it step by step, without rebuilding what works.`
     : `${name} needs a clear online home first. Oliskey Lab will build a website from your answers, connect your enquiries and social media, and grow from there.`;
-  return { summary, journey, products, priorities: priorities.slice(0, 5), source: 'rules' };
+  return { summary, journey, products, priorities: priorities.slice(0, 5), source: 'rules', blueprint: buildBlueprint({ ...a, sector }) };
 }

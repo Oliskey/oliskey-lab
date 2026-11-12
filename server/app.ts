@@ -333,6 +333,11 @@ export function createApp() {
     if (done) await log(req.ctx.orgId, req.ctx.name, 'Completed a weekly focus', id);
     res.json(await focusFor(req.ctx.orgId));
   }));
+  app.post('/api/automations/:id/request', as('editor'), wrap(async (req, res) => {
+    const title = String(req.body?.title || req.params.id).slice(0, 120);
+    await log(req.ctx.orgId, req.ctx.name, 'Asked Oliskey to set up an automation', title);
+    res.json({});
+  }));
   app.get('/api/health', (_req, res) => res.json({ ok: true }));
   app.use('/api', (_req, _res, next) => next(new HttpError(404, 'Not found.')));
 

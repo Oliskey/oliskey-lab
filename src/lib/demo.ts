@@ -10,7 +10,7 @@ import type {
 import { recommend } from '../../shared/recommend';
 import { generateSite, validateSite } from '../../shared/generate';
 
-const KEY = 'oliskey.lab.demo.v1';
+const KEY = 'oliskey.lab.demo.v2';
 const DAY = 24 * 3600 * 1000;
 const id = () => Math.random().toString(36).slice(2, 10);
 const ago = (min: number) => new Date(Date.now() - min * 60000).toISOString();
@@ -18,7 +18,8 @@ const pause = (ms = 260) => new Promise((r) => setTimeout(r, ms));
 
 export const DEMO_ANSWERS: DiscoveryAnswers = {
   businessName: "Adunni's Kitchen",
-  whatYouDo: 'Home-style Nigerian meals, small chops and party catering',
+  whatYouDo: 'Home-style Nigerian meals, small chops and party catering, with delivery',
+  teamSize: '6-20',
   offers: ['Jollof rice and chicken', 'Ofada rice and ayamase', 'Small chops platter', 'Party catering (50+ guests)', 'Weekly office lunch plan'],
   idealCustomers: 'office workers, families and event planners',
   customerLocation: 'Lekki and Victoria Island, Lagos',
@@ -236,6 +237,7 @@ export class DemoApi implements Api {
     this.log('Requested connection', platform); this.save(); return a;
   }
   async audit() { return this.s.audit; }
+  async requestAutomation(_aid: string, title: string) { await pause(500); this.log('Asked Oliskey to set up an automation', title); this.save(); }
   async metrics(): Promise<Metrics> {
     // sample figures for the demo business (a real account counts its own leads and connected sales)
     const site = this.s.products.find((p) => p.health);

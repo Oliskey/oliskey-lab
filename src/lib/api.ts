@@ -48,6 +48,7 @@ export interface Api {
   metrics(): Promise<Metrics>;
   focus(): Promise<FocusItem[]>;
   setFocus(id: string, done: boolean): Promise<FocusItem[]>;
+  requestAutomation(id: string, title: string): Promise<void>;
 }
 
 export class ApiError extends Error {
@@ -101,4 +102,5 @@ export class HttpApi implements Api {
   metrics() { return this.call<Metrics>('GET', '/metrics'); }
   focus() { return this.call<FocusItem[]>('GET', '/focus'); }
   setFocus(id: string, done: boolean) { return this.call<FocusItem[]>('PUT', `/focus/${encodeURIComponent(id)}`, { done }); }
+  requestAutomation(id: string, title: string) { return this.call<void>('POST', `/automations/${encodeURIComponent(id)}/request`, { title }); }
 }

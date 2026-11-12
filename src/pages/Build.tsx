@@ -5,6 +5,7 @@ import { useApp } from '../app/context';
 import { Badge, ErrorState, LoadingBlock, useLoad, useToast } from '../components/ui';
 import { ActionTile, HubHeader, RowLink, Segmented } from '../components/blocks';
 import { highestLevel } from './Control';
+import { Dashboards } from '../components/BlueprintView';
 
 /** The live website shown on a laptop and a phone: real pages in small frames, so owners recognise their own site. */
 const Devices: React.FC<{ src: string | null }> = ({ src }) => (
@@ -75,6 +76,8 @@ export default function Build() {
 
       {tab === 'app' && (
         <div className="enter mt-5 space-y-3">
+          {strategy?.blueprint && <div className="mb-6"><h2 className="text-[19px] font-bold">Your app: {strategy.blueprint.dashboards.length} dashboards</h2><div className="mt-2"><Dashboards b={strategy.blueprint} /></div></div>}
+          <h2 className="text-[19px] font-bold">How to deliver it</h2>
           <p className="max-w-read text-[15px] text-muted">Most businesses start with an installable web app — it works on every phone with no store fees. Lab only recommends a store app when it pays for itself.</p>
           {(strategy?.products.filter((p) => p.kind !== 'website') || []).map((p) => (
             <div key={p.kind} className="rounded-[18px] border border-line bg-raised p-5">

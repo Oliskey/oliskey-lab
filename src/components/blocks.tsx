@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
+import { Duo, IconBadge, type Hue } from './icons';
 
 export const HubHeader: React.FC<{ title: string; lead: string; action?: React.ReactNode }> = ({ title, lead, action }) => (
   <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -25,16 +26,16 @@ export function Segmented<T extends string>({ value, onChange, options, label }:
 }
 
 /** A tappable row: icon, title, one line, chevron. Used for the main tasks in each hub. */
-export const RowLink: React.FC<{ to?: string; href?: string; onClick?: () => void; icon: React.ElementType; title: string; text?: string; badge?: React.ReactNode }> = ({ to, href, onClick, icon: Icon, title, text, badge }) => {
+export const RowLink: React.FC<{ to?: string; href?: string; onClick?: () => void; icon: React.ElementType; title: string; text?: string; badge?: React.ReactNode; hue?: Hue }> = ({ to, href, onClick, icon, title, text, badge, hue = 'blue' }) => {
   const inner = (
     <>
-      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-[14px] bg-accent/10 text-accent"><Icon size={22} aria-hidden="true" /></span>
+      <IconBadge icon={icon} hue={hue} />
       <span className="min-w-0 flex-1"><span className="block text-[16px] font-semibold text-ink">{title}</span>{text && <span className="mt-0.5 block text-[14px] text-muted">{text}</span>}</span>
       {badge}
       <ChevronRight size={20} className="shrink-0 text-faint" aria-hidden="true" />
     </>
   );
-  const cls = 'flex min-h-[68px] w-full items-center gap-4 rounded-[18px] border border-line bg-raised px-4 py-3 text-left shadow-[0_6px_18px_-16px_rgb(var(--shadow)/0.4)] transition-[transform,background-color] duration-150 hover:bg-surface active:scale-[0.99]';
+  const cls = 'card flex min-h-[70px] w-full items-center gap-4 px-4 py-3 text-left transition-transform duration-150 hover:-translate-y-px active:scale-[0.99]';
   if (to) return <Link to={to} className={cls}>{inner}</Link>;
   if (href) return <a href={href} className={cls} target="_blank" rel="noreferrer">{inner}</a>;
   return <button onClick={onClick} className={cls}>{inner}</button>;
@@ -50,9 +51,9 @@ export const PlanCard: React.FC<{ to: string; icon: React.ElementType; title: st
 );
 
 /** A small action tile (icon over a short label), in a row of four. */
-export const ActionTile: React.FC<{ to?: string; href?: string; onClick?: () => void; icon: React.ElementType; label: string; busy?: boolean }> = ({ to, href, onClick, icon: Icon, label, busy }) => {
-  const cls = 'flex min-h-[76px] flex-col items-center justify-center gap-1.5 rounded-[18px] border border-line bg-raised text-[14px] font-medium text-ink transition-[transform,background-color] duration-150 hover:bg-surface active:scale-[0.97] disabled:opacity-50';
-  const inner = <><Icon size={22} className={busy ? 'animate-spin' : ''} aria-hidden="true" />{label}</>;
+export const ActionTile: React.FC<{ to?: string; href?: string; onClick?: () => void; icon: React.ElementType; label: string; busy?: boolean }> = ({ to, href, onClick, icon, label, busy }) => {
+  const cls = 'card flex min-h-[80px] flex-col items-center justify-center gap-1.5 text-[14px] font-semibold text-ink transition-transform duration-150 hover:-translate-y-px active:scale-[0.97] disabled:opacity-50';
+  const inner = <><Duo icon={icon} size={24} className={busy ? 'animate-spin' : ''} />{label}</>;
   if (to) return <Link to={to} className={cls}>{inner}</Link>;
   if (href) return <a href={href} target="_blank" rel="noreferrer" className={cls}>{inner}</a>;
   return <button onClick={onClick} disabled={busy} className={cls}>{inner}</button>;

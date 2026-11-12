@@ -5,6 +5,7 @@ import { useApp } from '../app/context';
 import { Badge, ErrorState, LoadingBlock, useLoad } from '../components/ui';
 import { HubHeader, PlanCard, RowLink, Segmented } from '../components/blocks';
 import { SAMPLE } from '../lib/demoData';
+import { BrandTile, Duo } from '../components/icons';
 import type { SocialPlatform } from '../../shared/types';
 
 export const PLATFORMS: Record<SocialPlatform, { name: string; icon: React.ElementType }> = {
@@ -45,14 +46,14 @@ export default function Grow() {
           <div className="space-y-4">
             <ul className="flex flex-wrap gap-3" aria-label="Social accounts">
               {data.map((s) => { const P = PLATFORMS[s.platform]; const on = s.status === 'connected'; return (
-                <li key={s.platform}><Link to="/app/social" className={`relative grid h-14 w-14 place-items-center rounded-[16px] border transition-transform hover:-translate-y-0.5 ${on ? 'border-accent/30 bg-accent text-white shadow-[0_8px_18px_-10px_rgba(31,107,255,0.8)]' : 'border-line bg-raised text-muted'}`} aria-label={`${P.name}: ${on ? 'connected' : s.status === 'awaiting_platform_approval' ? 'awaiting approval' : 'not connected'}`}>
-                  <P.icon size={26} aria-hidden="true" />{s.status === 'awaiting_platform_approval' && <span className="absolute -right-1 -top-1 h-3.5 w-3.5 rounded-full border-2 border-page bg-warn" aria-hidden="true" />}
+                <li key={s.platform}><Link to="/app/social" className="relative block rounded-[16px] shadow-[0_10px_20px_-14px_rgb(var(--shadow)/0.6)] transition-transform hover:-translate-y-0.5" aria-label={`${P.name}: ${on ? 'connected' : s.status === 'awaiting_platform_approval' ? 'awaiting approval' : 'not connected'}`}>
+                  <BrandTile platform={s.platform} size={52} muted={!on} />{s.status === 'awaiting_platform_approval' && <span className="absolute -right-1 -top-1 h-3.5 w-3.5 rounded-full border-2 border-page bg-warn" aria-hidden="true" />}
                 </Link></li>
               ); })}
-              <li><Link to="/app/social" className="grid h-14 w-14 place-items-center rounded-[16px] border border-dashed border-line bg-raised text-ink" aria-label="Connect an account"><Plus size={26} aria-hidden="true" /></Link></li>
+              <li><Link to="/app/social" className="card grid h-[52px] w-[52px] place-items-center !rounded-[16px] text-ink" aria-label="Connect an account"><Plus size={24} aria-hidden="true" /></Link></li>
             </ul>
-            <section className="rounded-[20px] border border-line bg-raised p-5 shadow-[0_8px_24px_-18px_rgb(var(--shadow)/0.35)]">
-              <div className="flex items-center justify-between"><h2 className="flex items-center gap-2 text-[17px] font-bold"><BarChart3 size={20} className="text-accent" aria-hidden="true" />Social Performance</h2>{sample && <span className="inline-flex items-center gap-0.5 text-[16px] font-bold text-good"><ArrowUp size={16} aria-hidden="true" />+{SAMPLE.reach.delta}%</span>}</div>
+            <section className="card p-5">
+              <div className="flex items-center justify-between"><h2 className="flex items-center gap-2 text-[17px] font-bold"><Duo icon={BarChart3} size={22} />Social Performance</h2>{sample && <span className="inline-flex items-center gap-0.5 text-[16px] font-bold text-good"><ArrowUp size={16} aria-hidden="true" />+{SAMPLE.reach.delta}%</span>}</div>
               {sample ? (<><p className="mt-2 text-[15px] text-muted">Reach <span className="tnum ml-1 text-[20px] font-bold text-ink">{SAMPLE.reach.total.toLocaleString()}</span></p><Spark data={SAMPLE.reach.weeks} /><p className="text-caption text-faint">Last 8 weeks · sample data</p></>)
                 : <p className="mt-2 text-small text-muted">{connected.length ? `Reach this month: ${reach.toLocaleString()}` : 'Connect an account to see your reach, followers and best posts.'}</p>}
             </section>
@@ -60,7 +61,7 @@ export default function Grow() {
           <div className="space-y-3">
             <RowLink to="/app/marketing#calendar" icon={CalendarDays} title="Content Calendar" text="Plan, create and schedule posts" />
             <RowLink to="/app/marketing#content" icon={PlayCircle} title="Create Content" text="Images, videos and captions" />
-            <RowLink to="/app/marketing#campaigns" icon={Megaphone} title="Run Ad Campaign" text="Reach more of the right customers" />
+            <RowLink hue="violet" to="/app/marketing#campaigns" icon={Megaphone} title="Run Ad Campaign" text="Reach more of the right customers" />
             <PlanCard to="/app/discovery" icon={Target} title="Growth Plan" text="This week’s marketing actions, made for your business." />
           </div>
         </div>
@@ -69,7 +70,7 @@ export default function Grow() {
       {tab === 'ads' && (
         <div className="enter mt-5 space-y-3">
           {sample ? SAMPLE.campaigns.map((c) => (
-            <div key={c.name} className="rounded-[18px] border border-line bg-raised p-5">
+            <div key={c.name} className="card p-5">
               <div className="flex flex-wrap items-start justify-between gap-2"><div><p className="text-[16px] font-semibold">{c.name}</p><p className="text-caption text-muted">{c.channel}</p></div><Badge tone={c.status === 'Running' ? 'good' : c.status === 'Finished' ? 'neutral' : 'warn'}>{c.status}</Badge></div>
               <dl className="tnum mt-4 grid grid-cols-3 gap-3 text-small"><div><dt className="text-caption text-muted">Spent</dt><dd className="font-semibold">₦{c.spent.toLocaleString()} <span className="font-normal text-faint">of ₦{c.budget.toLocaleString()}</span></dd></div><div><dt className="text-caption text-muted">Enquiries</dt><dd className="font-semibold">{c.leads}</dd></div><div><dt className="text-caption text-muted">Cost each</dt><dd className="font-semibold">{c.cost ? `₦${c.cost.toLocaleString()}` : '—'}</dd></div></dl>
             </div>
@@ -81,8 +82,8 @@ export default function Grow() {
       {tab === 'content' && (
         <div className="enter mt-5 grid gap-6 lg:grid-cols-2">
           {sample ? (<>
-            <section><h2 className="text-[17px] font-bold">This week</h2><ul className="mt-3 space-y-2">{SAMPLE.posts.map((p) => <li key={p.title} className="flex items-center gap-3 rounded-[16px] border border-line bg-raised px-4 py-3"><span className="w-12 shrink-0 text-center"><span className="block text-[13px] font-bold">{p.day}</span><span className="block text-caption text-muted">{p.time}</span></span><span className="min-w-0 flex-1"><span className="block truncate text-[15px] font-semibold">{p.title}</span><span className="block text-caption text-muted">{p.platform}</span></span><Badge tone={p.status === 'Scheduled' ? 'good' : p.status === 'Draft' ? 'accent' : 'neutral'}>{p.status}</Badge></li>)}</ul></section>
-            <section><h2 className="text-[17px] font-bold">Ideas from your customers</h2><ul className="mt-3 space-y-2">{SAMPLE.ideas.map((i) => <li key={i.title} className="rounded-[16px] border border-line bg-raised px-4 py-3"><p className="text-[15px] font-semibold">{i.title}</p><p className="text-caption text-muted">{i.why}</p></li>)}</ul></section>
+            <section><h2 className="text-[17px] font-bold">This week</h2><ul className="mt-3 space-y-2">{SAMPLE.posts.map((p) => <li key={p.title} className="card flex items-center gap-3 !rounded-[16px] px-4 py-3"><span className="w-12 shrink-0 text-center"><span className="block text-[13px] font-bold">{p.day}</span><span className="block text-caption text-muted">{p.time}</span></span><span className="min-w-0 flex-1"><span className="block truncate text-[15px] font-semibold">{p.title}</span><span className="block text-caption text-muted">{p.platform}</span></span><Badge tone={p.status === 'Scheduled' ? 'good' : p.status === 'Draft' ? 'accent' : 'neutral'}>{p.status}</Badge></li>)}</ul></section>
+            <section><h2 className="text-[17px] font-bold">Ideas from your customers</h2><ul className="mt-3 space-y-2">{SAMPLE.ideas.map((i) => <li key={i.title} className="card !rounded-[16px] px-4 py-3"><p className="text-[15px] font-semibold">{i.title}</p><p className="text-caption text-muted">{i.why}</p></li>)}</ul></section>
           </>) : <Soon what="Content" text="A calendar for every account, with post ideas drawn from your real customer questions." />}
         </div>
       )}
@@ -98,7 +99,7 @@ export default function Grow() {
 }
 
 export const Soon: React.FC<{ what: string; text: string }> = ({ what, text }) => (
-  <div className="rounded-[20px] border border-line bg-raised p-6">
+  <div className="card p-6">
     <Badge tone="accent">Coming next</Badge>
     <p className="mt-3 text-[17px] font-semibold">{what} arrives in the next release</p>
     <p className="mt-1 max-w-read text-small text-muted">{text} You can see it working now in the demo.</p>

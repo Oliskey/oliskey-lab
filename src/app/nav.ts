@@ -34,7 +34,7 @@ export const NAV: NavItem[] = [
   { to: '/app/customers', label: 'Customers', short: 'Customers', icon: Users, real: true, group: 'Grow', desc: 'Manage leads and sales' },
   { to: '/app/insights', label: 'Analytics', short: 'Analytics', icon: BarChart3, real: false, group: 'Grow', desc: 'Track performance' },
   { to: '/app/digitise', label: 'Digitise', short: 'Digitise', icon: Zap, real: false, group: 'Run', desc: 'Paper work into simple forms' },
-  { to: '/app/automation', label: 'Automation', short: 'Automation', icon: Workflow, real: false, group: 'Run', desc: 'Let routine work run itself' },
+  { to: '/app/automation', label: 'Automation', short: 'Automation', icon: Workflow, real: true, group: 'Run', desc: 'Let routine work run itself' },
   { to: '/app/improve', label: 'Weekly Update', short: 'Weekly Update', icon: TrendingUp, real: false, group: 'Run', desc: 'Results and next steps' },
   { to: '/app/coach', label: 'Learning', short: 'Learning', icon: GraduationCap, real: false, group: 'Run', desc: 'Step-by-step guides' },
   { to: '/app/access', label: 'Settings and access', short: 'Settings', icon: ShieldCheck, real: true, group: 'Account', desc: 'Business, team and access' },
