@@ -35,7 +35,7 @@ export default function Customers() {
 
       {!data.length ? <div className="mt-6"><EmptyState icon={Users} title="No enquiries yet" text="When someone uses the form on your website, they appear here straight away." /></div>
         : !list.length ? <p className="mt-8 text-center text-small text-muted">No one matches. Try another filter or search.</p> : (
-          <ul className="mt-5 grid gap-3 lg:grid-cols-2">
+          <ul className="mt-5 grid gap-3 lg:grid-cols-2 grid-cols-1">
             {list.map((l) => (
               <li key={l.id}>
                 <button onClick={() => setOpen(l)} className="flex w-full items-start gap-3.5 rounded-[18px] border border-line bg-raised p-4 text-left transition-colors hover:bg-surface">

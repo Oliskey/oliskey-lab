@@ -106,7 +106,7 @@ export default function Home() {
       </div>
 
       {tab === 'overview' && (
-        <div className="enter mt-6 grid gap-4 lg:grid-cols-12">
+        <div className="enter mt-6 grid gap-4 lg:grid-cols-12 grid-cols-1">
           <div className="lg:col-span-5"><HealthCard m={m} /></div>
           <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:col-span-7 lg:grid-cols-4">
             <Tile icon={Users} value={m.customers.toLocaleString()} label="Customers" delta={m.customersDelta} to="/app/customers" />
@@ -124,7 +124,7 @@ export default function Home() {
       )}
 
       {tab === 'week' && (
-        <div className="enter mt-6 grid gap-4 lg:grid-cols-2">
+        <div className="enter mt-6 grid gap-4 lg:grid-cols-2 grid-cols-1">
           <Focus items={focus} onToggle={toggle} limit={10} />
           <section className="card p-5">
             <h2 className="text-[19px] font-bold tracking-tight">What happened this week</h2>

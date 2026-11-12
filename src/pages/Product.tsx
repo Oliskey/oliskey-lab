@@ -69,7 +69,7 @@ export default function Product() {
             {api.demo && <p className="mt-4 rounded-field bg-surface px-3.5 py-2.5 text-caption text-muted">Demo: this is a sample report. In a real account, Lab reads the live website.</p>}
             {!!failing.length && <ul className="mt-6 space-y-3">{failing.map((c) => <li key={c.id} className="flex gap-3"><XCircle size={20} className="mt-0.5 shrink-0 text-bad" aria-hidden="true" /><div><p className="text-[15px] font-semibold">{c.title} <span className="font-normal text-faint">· {AREAS[c.area]}</span></p><p className="text-small text-muted">{c.detail}</p></div></li>)}</ul>}
             <details className="mt-6 border-t border-line pt-4"><summary className="cursor-pointer text-small font-semibold">All {report.checks.length} checks</summary>
-              <ul className="mt-3 grid gap-2 sm:grid-cols-2">{report.checks.map((c) => <li key={c.id} className="flex gap-2 text-small">{c.ok ? <CheckCircle2 size={18} className="shrink-0 text-good" aria-label="Passed" /> : <XCircle size={18} className="shrink-0 text-bad" aria-label="Needs work" />}{c.title}</li>)}</ul>
+              <ul className="mt-3 grid gap-2 sm:grid-cols-2 grid-cols-1">{report.checks.map((c) => <li key={c.id} className="flex gap-2 text-small">{c.ok ? <CheckCircle2 size={18} className="shrink-0 text-good" aria-label="Passed" /> : <XCircle size={18} className="shrink-0 text-bad" aria-label="Needs work" />}{c.title}</li>)}</ul>
             </details>
           </div>
         )}
@@ -143,7 +143,7 @@ const GrantForm: React.FC<{ p: DigitalProduct; active: Grant[]; onGrant: (p: Per
   return (
     <div className="mt-4">
       <p className="field-label">Grant a permission</p>
-      <ul className="grid gap-2 sm:grid-cols-2">
+      <ul className="grid gap-2 sm:grid-cols-2 grid-cols-1">
         {avail.map((x) => { const ok = p.levels.includes(x.needs); return (
           <li key={x.id} className="flex items-center justify-between gap-3 rounded-field border border-line bg-raised px-4 py-3">
             <div className="min-w-0"><p className="text-[14px] font-semibold">{x.name}</p><p className="text-caption text-muted">{ok ? x.text : `Needs ${ACCESS_LEVELS.find((l) => l.id === x.needs)?.name.toLowerCase()} first.`}</p></div>

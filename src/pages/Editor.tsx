@@ -112,7 +112,7 @@ export default function Editor() {
         {(['edit', 'preview'] as const).map((v) => <button key={v} role="tab" aria-selected={view === v} onClick={() => setView(v)} className={`min-h-[40px] flex-1 rounded-control text-[14px] font-semibold ${view === v ? 'bg-accent/12 text-accent-ink' : 'text-muted'}`}>{v === 'edit' ? 'Edit' : 'Preview'}</button>)}
       </div>
 
-      <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(340px,420px)_1fr]">
+      <div className="mt-6 grid gap-8 lg:grid-cols-[minmax(340px,420px)_1fr] grid-cols-1">
         <div className={`${view === 'preview' ? 'hidden lg:block' : ''}`}>
           <div className="mb-5 flex gap-1 border-b border-line" role="tablist" aria-label="What to edit">
             {([['pages', 'Pages'], ['brand', 'Business details'], ['search', 'Search']] as const).map(([k, l]) => (

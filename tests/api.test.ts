@@ -48,6 +48,16 @@ describe('Oliskey Lab API', () => {
     const v2 = await owner('PUT', `/api/sites/${siteId}/draft`, { content: c, note: 'Added phone' }); expect(v2.body.draft.number).toBe(2);
     const bad = { ...c, pages: [] }; expect((await owner('PUT', `/api/sites/${siteId}/draft`, { content: bad, note: '' })).status).toBe(400);
   });
+  it('refuses badly shaped sections, empty headings and missing search details', async () => {
+    const c = (await owner('GET', `/api/sites/${siteId}`)).body.draft.content;
+    const put = (content: unknown) => owner('PUT', `/api/sites/${siteId}/draft`, { content, note: '' });
+    const noItems = structuredClone(c); noItems.pages[0].sections.push({ type: 'offers', heading: 'Broken' });
+    expect((await put(noItems)).status).toBe(400);
+    const empty = structuredClone(c); empty.pages[0].sections[0].heading = '  ';
+    expect((await put(empty)).status).toBe(400);
+    const noSeo = structuredClone(c); delete noSeo.seo;
+    expect((await put(noSeo)).status).toBe(400);
+  });
   it('is not public before publishing, and is after', async () => {
     expect((await anon('GET', `/api/public/sites/${slug}`)).status).toBe(404);
     const p = await owner('POST', `/api/sites/${siteId}/publish`); expect(p.body.site.status).toBe('published');
@@ -84,10 +94,18 @@ describe('Oliskey Lab API', () => {
   });
   it('refuses requests from another website', async () => {
     expect((await owner('POST', '/api/sites', undefined, { origin: 'https://evil.example' })).status).toBe(403);
+    expect((await owner('POST', '/api/sites', undefined, { origin: 'null' })).status).toBe(403);
+  });
+  it('answers malformed ids and unknown records with 404, not a server error', async () => {
+    expect((await owner('POST', '/api/sites/not-a-uuid/publish')).status).toBe(404);
+    expect((await owner('PUT', '/api/sites/not-a-uuid/draft', { content: {}, note: '' })).status).toBe(404);
+    expect((await owner('DELETE', '/api/grants/00000000-0000-0000-0000-000000000000')).status).toBe(404);
+    expect((await owner('PUT', '/api/focus/made-up-item', { done: true })).status).toBe(404);
   });
   it('keeps the history permanent', async () => {
     const h = await owner('GET', '/api/audit'); expect(h.body.length).toBeGreaterThan(3);
     await expect(q('delete from audit_log where id = $1', [h.body[0].id])).rejects.toThrow(/cannot be changed/);
+    await expect(q('truncate audit_log')).rejects.toThrow(/cannot be changed/);
   });
   it('will not inspect private network addresses', async () => {
     const r = await owner('POST', '/api/products', { type: 'website', name: 'Internal', url: '127.0.0.1.nip.io' });

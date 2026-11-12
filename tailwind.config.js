@@ -16,7 +16,7 @@ export default {
       },
       fontSize: {
         // semantic type scale: page title, section title, card title, body, secondary, label, caption
-        page: ['clamp(1.75rem, 2.6vw, 2.25rem)', { lineHeight: '1.12', letterSpacing: '-0.025em', fontWeight: '700' }],
+        title: ['clamp(1.75rem, 2.6vw, 2.25rem)', { lineHeight: '1.12', letterSpacing: '-0.025em', fontWeight: '700' }],
         section: ['1.25rem', { lineHeight: '1.3', letterSpacing: '-0.015em', fontWeight: '650' }],
         card: ['1.0625rem', { lineHeight: '1.35', letterSpacing: '-0.01em', fontWeight: '600' }],
         body: ['0.9375rem', { lineHeight: '1.55' }],

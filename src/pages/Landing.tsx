@@ -40,7 +40,7 @@ export default function Landing() {
           </div>
           <p className="mt-3 text-caption text-muted">The demo opens a sample restaurant. No account, nothing to install.</p>
 
-          <div className="mt-14 grid gap-4 md:grid-cols-2">
+          <div className="mt-14 grid gap-4 md:grid-cols-2 grid-cols-1">
             {[{ icon: Globe, t: 'Starting online', d: 'No website or app yet. Lab understands your business, builds the right website, and connects your enquiries and social media.' },
               { icon: PlugZap, t: 'Already online', d: 'You have a website, app or social pages. Lab connects them with your permission, checks them and improves what holds customers back — without rebuilding what works.' }].map((c) => (
               <div key={c.t} className="panel p-6">
@@ -54,8 +54,8 @@ export default function Landing() {
 
         <section className="border-t border-line bg-surface py-16 md:py-24">
           <div className="page-x">
-            <h2 className="text-page">How it works</h2>
-            <ol className="mt-10 grid gap-8 md:grid-cols-4">
+            <h2 className="text-title">How it works</h2>
+            <ol className="mt-10 grid gap-8 md:grid-cols-4 grid-cols-1">
               {STEPS.map((s, i) => (
                 <li key={s.t}>
                   <span className="tnum grid h-9 w-9 place-items-center rounded-full bg-navy text-[14px] font-bold text-white dark:bg-white dark:text-navy">{i + 1}</span>
@@ -69,9 +69,9 @@ export default function Landing() {
 
         <section className="py-16 md:py-24">
           <div className="page-x">
-            <h2 className="text-page">Everything in one account</h2>
+            <h2 className="text-title">Everything in one account</h2>
             <p className="mt-2 max-w-read text-body text-muted">Each area shares the same business information, permissions and results.</p>
-            <div className="mt-10 grid gap-10 md:grid-cols-3">
+            <div className="mt-10 grid gap-10 md:grid-cols-3 grid-cols-1">
               {groups.map((g) => (
                 <div key={g}>
                   <h3 className="text-caption font-semibold uppercase tracking-[0.12em] text-faint">{g}</h3>
@@ -92,7 +92,7 @@ export default function Landing() {
         <section className="border-t border-line bg-surface py-16">
           <div className="page-x">
             <h2 className="text-section">Your business stays yours</h2>
-            <ul className="mt-5 grid gap-3 md:grid-cols-3">
+            <ul className="mt-5 grid gap-3 md:grid-cols-3 grid-cols-1">
               {['Lab only does what you allow, and you can take access back at any time.', 'Nothing goes live without your approval, and every change can be undone.', 'Your domain, content, customers and code remain yours. Lab never asks for your passwords.'].map((t) => (
                 <li key={t} className="flex gap-2.5 text-small text-ink"><Check size={18} className="mt-0.5 shrink-0 text-good" aria-hidden="true" />{t}</li>
               ))}

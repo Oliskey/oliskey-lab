@@ -42,8 +42,21 @@ const Root = () => (
   </ToastProvider></AppProvider>
 );
 
+/** Shown instead of a stack trace if a page fails: plain words and a way back. Details stay in the console. */
+function RouteError() {
+  return (
+    <main className="grid min-h-screen place-items-center bg-page px-6 text-center text-ink">
+      <div className="max-w-sm">
+        <h1 className="text-[22px] font-bold">This page could not be shown</h1>
+        <p className="mt-2 text-small text-muted">Something on it is not set up correctly. Please try again, or go back to the start.</p>
+        <a href={import.meta.env.BASE_URL} className="btn-primary mt-6">Go to the start</a>
+      </div>
+    </main>
+  );
+}
+
 const router = createBrowserRouter(createRoutesFromElements(
-    <Route element={<Root />}>
+    <Route element={<Root />} errorElement={<RouteError />}>
       <Route path="/" element={<Landing />} />
       <Route path="/sign-in" element={<SignIn />} />
       <Route path="/sign-up" element={<SignUp />} />

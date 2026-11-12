@@ -40,16 +40,22 @@ const log = (orgId: string, actor: string, action: string, target: string, detai
 
 export function createApp() {
   const app = express();
-  app.set('trust proxy', 1);
+  // Trust X-Forwarded-For only behind a proxy that overwrites it (set TRUST_PROXY=1 there), or rate limits can be dodged.
+  if (process.env.TRUST_PROXY) app.set('trust proxy', Number(process.env.TRUST_PROXY) || process.env.TRUST_PROXY);
   app.use(helmet({ contentSecurityPolicy: false, frameguard: { action: 'sameorigin' } }));
   app.use(express.json({ limit: '1mb' }));
   app.use(cookieParser());
+
+  // every :id in the API is a UUID; anything else is simply not found (no raw database errors)
+  app.param('id', (req, _res, next, id) => (/^\/api\/(sites|products|grants|leads)\//.test(req.originalUrl) && !isUuid(String(id)) ? next(new HttpError(404, 'Not found.')) : next()));
 
   // requests that change data must be JSON from this site (with the same-site cookie this blocks cross-site forgery)
   app.use('/api', (req, _res, next) => {
     if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) return next();
     const origin = req.get('origin');
-    if (origin && new URL(origin).host !== req.get('host')) return next(new HttpError(403, 'This request came from another website and was refused.'));
+    let host = '';
+    try { host = origin ? new URL(origin).host : ''; } catch { host = 'invalid'; }
+    if (origin && host !== req.get('host')) return next(new HttpError(403, 'This request came from another website and was refused.'));
     if (req.get('content-length') !== '0' && req.body && !req.is('application/json') && req.get('content-length')) return next(new HttpError(415, 'Send JSON.'));
     next();
   });
@@ -282,7 +288,8 @@ export function createApp() {
   app.delete('/api/grants/:id', as('owner'), wrap(async (req, res) => {
     if (!isUuid(req.params.id)) throw new HttpError(404, 'Not found.');
     const g = (await q('update grants set revoked_at = now() where id = $1 and org_id = $2 and revoked_at is null returning *', [req.params.id, req.ctx.orgId])).rows[0];
-    if (g) { const prod = (await q('select name from products where id = $1', [g.product_id])).rows[0]; await log(req.ctx.orgId, req.ctx.name, `Revoked ${g.permission} access`, prod?.name || 'Product'); }
+    if (!g) throw new HttpError(404, 'That access was not found or is already revoked.');
+    const prod = (await q('select name from products where id = $1', [g.product_id])).rows[0]; await log(req.ctx.orgId, req.ctx.name, `Revoked ${g.permission} access`, prod?.name || 'Product');
     res.json({});
   }));
 
@@ -329,6 +336,7 @@ export function createApp() {
   app.get('/api/focus', as(), wrap(async (req, res) => res.json(await focusFor(req.ctx.orgId))));
   app.put('/api/focus/:id', as('editor'), wrap(async (req, res) => {
     const id = String(req.params.id).slice(0, 40); const done = !!req.body?.done;
+    if (!(await focusFor(req.ctx.orgId)).some((x) => x.id === id)) throw new HttpError(404, 'That focus item was not found.');
     await q(done ? 'update organisations set focus_done = array(select distinct unnest(focus_done || array[$2::text])) where id = $1' : 'update organisations set focus_done = array_remove(focus_done, $2) where id = $1', [req.ctx.orgId, id]);
     if (done) await log(req.ctx.orgId, req.ctx.name, 'Completed a weekly focus', id);
     res.json(await focusFor(req.ctx.orgId));

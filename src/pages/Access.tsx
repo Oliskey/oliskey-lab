@@ -17,7 +17,7 @@ export default function Access() {
     <div className="enter">
       <PageHeader title="Settings and access" lead="Your business, what Oliskey Lab may do, and everything that has happened." />
       <Section title="Business">
-        <dl className="panel grid gap-4 p-5 sm:grid-cols-3">
+        <dl className="panel grid gap-4 p-5 sm:grid-cols-3 grid-cols-1">
           <div><dt className="text-caption text-muted">Business</dt><dd className="mt-0.5 text-[15px] font-semibold">{session?.org?.name}</dd></div>
           <div><dt className="text-caption text-muted">You</dt><dd className="mt-0.5 text-[15px] font-semibold">{session?.user.name} <span className="font-normal text-muted">· {session?.role}</span></dd></div>
           <div><dt className="text-caption text-muted">Sign-in email</dt><dd className="mt-0.5 truncate text-[15px] font-semibold">{session?.user.email}</dd></div>

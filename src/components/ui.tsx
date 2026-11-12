@@ -17,7 +17,7 @@ export const PageHeader: React.FC<{ title: string; lead?: React.ReactNode; actio
   <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
     <div className="min-w-0">
       {eyebrow && <p className="eyebrow mb-2">{eyebrow}</p>}
-      <h1 className="text-page text-ink">{title}</h1>
+      <h1 className="text-title text-ink">{title}</h1>
       {lead && <p className="mt-2 max-w-read text-body text-muted">{lead}</p>}
     </div>
     {action && <div className="flex shrink-0 flex-wrap gap-2">{action}</div>}
@@ -92,13 +92,14 @@ export function useLoad<T>(fn: () => Promise<T>, deps: unknown[] = []) {
 
 /** Accessible dialog on the native element: focus is trapped, Escape closes, focus returns to the opener. */
 export const Dialog: React.FC<{ open: boolean; onClose: () => void; title: string; children: React.ReactNode; footer?: React.ReactNode }> = ({ open, onClose, title, children, footer }) => {
+  const titleId = React.useId();
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => { const d = ref.current; if (!d) return; if (open && !d.open) d.showModal(); if (!open && d.open) d.close(); }, [open]);
   return (
-    <dialog ref={ref} onClose={onClose} onCancel={(e) => { e.preventDefault(); onClose(); }} aria-labelledby="dlg-title"
+    <dialog ref={ref} onClose={onClose} onCancel={(e) => { e.preventDefault(); onClose(); }} aria-labelledby={titleId}
       className="w-[min(560px,calc(100vw-32px))] rounded-card border border-line bg-raised p-0 text-ink shadow-2xl backdrop:bg-navy/40 backdrop:backdrop-blur-[2px]">
       <div className="flex items-center justify-between gap-4 border-b border-line px-6 py-4">
-        <h2 id="dlg-title" className="text-card">{title}</h2>
+        <h2 id={titleId} className="text-card">{title}</h2>
         <button className="icon-btn -mr-2" onClick={onClose} aria-label="Close"><X size={20} /></button>
       </div>
       <div className="max-h-[70vh] overflow-y-auto px-6 py-5">{children}</div>

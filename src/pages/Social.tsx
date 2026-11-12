@@ -29,7 +29,7 @@ export default function Social() {
   return (
     <div className="enter">
       <PageHeader title="Social media accounts" lead="Connect each account through the platform’s own sign-in. You choose what Lab may do, and you can disconnect at any time." />
-      <ul className="mt-6 grid gap-3 md:grid-cols-2">
+      <ul className="mt-6 grid gap-3 md:grid-cols-2 grid-cols-1">
         {data.map((s) => { const P = PLATFORMS[s.platform]; return (
           <li key={s.platform} className="card flex items-center gap-4 p-4">
             <BrandTile platform={s.platform} size={48} muted={s.status !== 'connected'} />

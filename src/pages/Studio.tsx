@@ -34,7 +34,7 @@ export default function Studio() {
         <div className="mt-8"><EmptyState icon={LayoutTemplate} title="No website yet" text="Lab will create a complete first version — pages, text and an enquiry form — from your answers. Nothing is published until you approve it." action={<ActionButton busy={busy} onClick={create}>{busy ? 'Building your website…' : 'Create my website'}</ActionButton>} /></div>
       ) : (
         <Section title="Your websites">
-          <ul className="grid gap-4 md:grid-cols-2">
+          <ul className="grid gap-4 md:grid-cols-2 grid-cols-1">
             {sites.map((s) => (
               <li key={s.id} className="panel flex flex-col p-5">
                 <div className="flex items-start justify-between gap-3">

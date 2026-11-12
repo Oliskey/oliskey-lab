@@ -123,3 +123,5 @@ create or replace function audit_log_append_only() returns trigger language plpg
 begin raise exception 'The history cannot be changed or deleted.'; end $$;
 drop trigger if exists audit_log_no_change on audit_log;
 create trigger audit_log_no_change before update or delete on audit_log for each row execute function audit_log_append_only();
+drop trigger if exists audit_log_no_truncate on audit_log;
+create trigger audit_log_no_truncate before truncate on audit_log for each statement execute function audit_log_append_only();

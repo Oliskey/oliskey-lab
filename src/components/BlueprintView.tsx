@@ -12,7 +12,7 @@ export const Dashboards: React.FC<{ b: Blueprint }> = ({ b }) => (
   <div>
     <p className="max-w-read text-[15px] text-muted">{b.summary}</p>
     {b.existingProduct && <p className="mt-2 text-small">Good news: <a className="font-semibold text-accent-ink" href={b.existingProduct.url}>{b.existingProduct.name}</a> already has these dashboards, ready to use.</p>}
-    <ul className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <ul className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4 grid-cols-1">
       {b.dashboards.map((d, i) => { const D = DEVICE[d.device]; return (
         <li key={d.role} className="card flex flex-col p-5">
           <div className="flex items-start justify-between gap-3"><span className="tnum text-caption font-bold text-faint">{i + 1} of {b.dashboards.length}</span><span className="inline-flex items-center gap-1 text-caption font-semibold text-muted"><D size={14} aria-hidden="true" />{d.device}</span></div>
@@ -51,5 +51,5 @@ export const AutomationCard: React.FC<{ a: Automation; i: number; onRequest?: (a
 };
 
 export const Automations: React.FC<{ b: Blueprint; onRequest?: (a: Automation) => Promise<void> }> = ({ b, onRequest }) => (
-  <ul className="grid gap-4 lg:grid-cols-2">{b.automations.map((a, i) => <AutomationCard key={a.id} a={a} i={i} onRequest={onRequest} />)}</ul>
+  <ul className="grid gap-4 lg:grid-cols-2 grid-cols-1">{b.automations.map((a, i) => <AutomationCard key={a.id} a={a} i={i} onRequest={onRequest} />)}</ul>
 );

@@ -42,7 +42,7 @@ export default function Grow() {
       <div className="mt-5"><Segmented label="Grow" value={tab} onChange={setTab} options={[{ v: 'social', l: 'Social' }, { v: 'ads', l: 'Ads' }, { v: 'content', l: 'Content' }, { v: 'campaigns', l: 'Campaigns' }]} /></div>
 
       {tab === 'social' && (
-        <div className="enter mt-5 grid gap-6 lg:grid-cols-2">
+        <div className="enter mt-5 grid gap-6 lg:grid-cols-2 grid-cols-1">
           <div className="space-y-4">
             <ul className="flex flex-wrap gap-3" aria-label="Social accounts">
               {data.map((s) => { const P = PLATFORMS[s.platform]; const on = s.status === 'connected'; return (
@@ -80,10 +80,10 @@ export default function Grow() {
       )}
 
       {tab === 'content' && (
-        <div className="enter mt-5 grid gap-6 lg:grid-cols-2">
+        <div className="enter mt-5 grid gap-6 lg:grid-cols-2 grid-cols-1">
           {sample ? (<>
-            <section><h2 className="text-[17px] font-bold">This week</h2><ul className="mt-3 space-y-2">{SAMPLE.posts.map((p) => <li key={p.title} className="card flex items-center gap-3 !rounded-[16px] px-4 py-3"><span className="w-12 shrink-0 text-center"><span className="block text-[13px] font-bold">{p.day}</span><span className="block text-caption text-muted">{p.time}</span></span><span className="min-w-0 flex-1"><span className="block truncate text-[15px] font-semibold">{p.title}</span><span className="block text-caption text-muted">{p.platform}</span></span><Badge tone={p.status === 'Scheduled' ? 'good' : p.status === 'Draft' ? 'accent' : 'neutral'}>{p.status}</Badge></li>)}</ul></section>
-            <section><h2 className="text-[17px] font-bold">Ideas from your customers</h2><ul className="mt-3 space-y-2">{SAMPLE.ideas.map((i) => <li key={i.title} className="card !rounded-[16px] px-4 py-3"><p className="text-[15px] font-semibold">{i.title}</p><p className="text-caption text-muted">{i.why}</p></li>)}</ul></section>
+            <section className="min-w-0"><h2 className="text-[17px] font-bold">This week</h2><ul className="mt-3 space-y-2">{SAMPLE.posts.map((p) => <li key={p.title} className="card flex items-center gap-3 !rounded-[16px] px-4 py-3"><span className="w-12 shrink-0 text-center"><span className="block text-[13px] font-bold">{p.day}</span><span className="block text-caption text-muted">{p.time}</span></span><span className="min-w-0 flex-1"><span className="block truncate text-[15px] font-semibold">{p.title}</span><span className="block text-caption text-muted">{p.platform}</span></span><Badge tone={p.status === 'Scheduled' ? 'good' : p.status === 'Draft' ? 'accent' : 'neutral'}>{p.status}</Badge></li>)}</ul></section>
+            <section className="min-w-0"><h2 className="text-[17px] font-bold">Ideas from your customers</h2><ul className="mt-3 space-y-2">{SAMPLE.ideas.map((i) => <li key={i.title} className="card !rounded-[16px] px-4 py-3"><p className="text-[15px] font-semibold">{i.title}</p><p className="text-caption text-muted">{i.why}</p></li>)}</ul></section>
           </>) : <Soon what="Content" text="A calendar for every account, with post ideas drawn from your real customer questions." />}
         </div>
       )}

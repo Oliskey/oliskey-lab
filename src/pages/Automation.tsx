@@ -24,7 +24,7 @@ export default function Automation() {
         {api.demo && (
           <section className="mt-6">
             <h2 className="text-[19px] font-bold">Running now</h2>
-            <ul className="mt-3 grid gap-3 md:grid-cols-3">
+            <ul className="mt-3 grid gap-3 md:grid-cols-3 grid-cols-1">
               {SAMPLE.automations.map((a) => <li key={a.name} className="card p-4"><div className="flex items-start justify-between gap-2"><p className="text-[15px] font-semibold">{a.name}</p><Badge tone={a.on ? 'good' : 'neutral'}>{a.on ? 'On' : 'Off'}</Badge></div><p className="tnum mt-2 text-caption text-muted">Ran {a.runs} times · sample data</p></li>)}
             </ul>
           </section>

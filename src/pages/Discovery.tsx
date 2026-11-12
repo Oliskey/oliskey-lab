@@ -122,7 +122,7 @@ export const Plan: React.FC<{ s: Strategy }> = ({ s }) => (
   <div>
     <p className="max-w-read text-[17px] leading-relaxed">{s.summary}</p>
     <Section title="What your business needs" lead="Lab never pushes an expensive app you do not need. Costs are what you pay others; Lab’s own plan is separate.">
-      <ul className="grid gap-4 md:grid-cols-2">
+      <ul className="grid gap-4 md:grid-cols-2 grid-cols-1">
         {s.products.map((p) => (
           <li key={p.kind} className="panel p-5">
             <div className="flex items-start justify-between gap-3"><h3 className="text-card">{KIND[p.kind]}</h3><Badge tone={VERDICT[p.verdict].tone}>{VERDICT[p.verdict].t}</Badge></div>

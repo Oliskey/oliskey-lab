@@ -79,21 +79,21 @@ const Block: React.FC<{ s: SiteSection; t: (typeof THEMES)[keyof typeof THEMES];
     case 'features': return (
       <section style={pad}><div className="wrap"><H2>{s.heading}</H2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 24, marginTop: 24 }}>
-          {s.items.map((it) => <div key={it.title}><span style={{ display: 'block', width: 28, height: 4, borderRadius: 4, background: 'var(--a)' }} /><h3 style={{ fontSize: 18, fontWeight: 650, marginTop: 14 }}>{it.title}</h3><p style={{ color: t.muted, marginTop: 6, lineHeight: 1.55 }}>{it.text}</p></div>)}
+          {(s.items || []).map((it) => <div key={it.title}><span style={{ display: 'block', width: 28, height: 4, borderRadius: 4, background: 'var(--a)' }} /><h3 style={{ fontSize: 18, fontWeight: 650, marginTop: 14 }}>{it.title}</h3><p style={{ color: t.muted, marginTop: 6, lineHeight: 1.55 }}>{it.text}</p></div>)}
         </div></div></section>
     );
     case 'offers': return (
       <section style={{ ...pad, background: first ? t.bg : t.alt }}><div className="wrap"><H2>{s.heading}</H2>
         <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))', gap: 16, marginTop: 24 }}>
-          {s.items.map((it) => <li key={it.name} style={{ background: t.bg, border: `1px solid ${t.line}`, borderRadius: t.radius, padding: 20 }}><div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}><h3 style={{ fontSize: 17, fontWeight: 650 }}>{it.name}</h3>{it.price && <p style={{ fontWeight: 700, color: 'var(--a)', whiteSpace: 'nowrap' }}>{it.price}</p>}</div><p style={{ color: t.muted, marginTop: 6, lineHeight: 1.5, fontSize: 15 }}>{it.text}</p></li>)}
+          {(s.items || []).map((it) => <li key={it.name} style={{ background: t.bg, border: `1px solid ${t.line}`, borderRadius: t.radius, padding: 20 }}><div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}><h3 style={{ fontSize: 17, fontWeight: 650 }}>{it.name}</h3>{it.price && <p style={{ fontWeight: 700, color: 'var(--a)', whiteSpace: 'nowrap' }}>{it.price}</p>}</div><p style={{ color: t.muted, marginTop: 6, lineHeight: 1.5, fontSize: 15 }}>{it.text}</p></li>)}
         </ul></div></section>
     );
     case 'about': return <section style={pad}><div className="wrap" style={{ maxWidth: 760 }}><H2>{s.heading}</H2><p style={{ marginTop: 16, fontSize: 17, lineHeight: 1.7, color: t.muted }}>{s.text}</p></div></section>;
     case 'testimonials': return (
-      <section style={pad}><div className="wrap"><H2>{s.heading}</H2><div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 16, marginTop: 24 }}>{s.items.map((q) => <figure key={q.name} style={{ border: `1px solid ${t.line}`, borderRadius: t.radius, padding: 20 }}><blockquote style={{ lineHeight: 1.6 }}>“{q.quote}”</blockquote><figcaption style={{ marginTop: 10, color: t.muted, fontSize: 14 }}>{q.name}</figcaption></figure>)}</div></div></section>
+      <section style={pad}><div className="wrap"><H2>{s.heading}</H2><div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 16, marginTop: 24 }}>{(s.items || []).map((q) => <figure key={q.name} style={{ border: `1px solid ${t.line}`, borderRadius: t.radius, padding: 20 }}><blockquote style={{ lineHeight: 1.6 }}>“{q.quote}”</blockquote><figcaption style={{ marginTop: 10, color: t.muted, fontSize: 14 }}>{q.name}</figcaption></figure>)}</div></div></section>
     );
     case 'faq': return (
-      <section style={pad}><div className="wrap" style={{ maxWidth: 760 }}><H2>{s.heading}</H2><div style={{ marginTop: 16 }}>{s.items.map((f) => <details key={f.q} style={{ borderBottom: `1px solid ${t.line}`, padding: '14px 0' }}><summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: 16 }}>{f.q}</summary><p style={{ marginTop: 8, color: t.muted, lineHeight: 1.6 }}>{f.a}</p></details>)}</div></div></section>
+      <section style={pad}><div className="wrap" style={{ maxWidth: 760 }}><H2>{s.heading}</H2><div style={{ marginTop: 16 }}>{(s.items || []).map((f) => <details key={f.q} style={{ borderBottom: `1px solid ${t.line}`, padding: '14px 0' }}><summary style={{ cursor: 'pointer', fontWeight: 600, fontSize: 16 }}>{f.q}</summary><p style={{ marginTop: 8, color: t.muted, lineHeight: 1.6 }}>{f.a}</p></details>)}</div></div></section>
     );
     case 'contact': return <section style={{ ...pad, background: first ? t.bg : t.alt }}><div className="wrap" style={{ maxWidth: 640 }}><H2>{s.heading}</H2><p style={{ marginTop: 8, color: t.muted }}>{s.text}</p><LeadForm t={t} onLead={onLead} preview={preview} name={content.brand.name} /></div></section>;
   }

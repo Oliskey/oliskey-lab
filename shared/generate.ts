@@ -1,7 +1,7 @@
 // Website generator (rules version): builds a complete, honest website from the Discovery answers.
 // It only creates the pages a business needs, never invents reviews or prices, and marks anything the owner must
 // fill in. The AI version (server) returns the same SiteContent shape and is checked against the same rules.
-import type { DiscoveryAnswers, Sector, SiteContent, SitePage } from './types';
+import type { SiteSection, DiscoveryAnswers, Sector, SiteContent, SitePage } from './types';
 import { guessSector } from './recommend';
 
 const OFFERS_PAGE: Record<Sector, { slug: string; title: string; heading: string }> = {
@@ -82,6 +82,20 @@ export function validateSite(c: SiteContent): string[] {
     if (!/^[a-z0-9-]*$/.test(p.slug)) errs.push(`The ${p.title} page address is not valid.`);
   }
   if ((c.pages || []).length > 8) errs.push('Too many pages for a first version.');
-  if (!(c.pages || []).some((p) => p.sections.some((s) => s.type === 'contact'))) errs.push('The site needs a way to contact the business.');
+  if (!c.seo || typeof c.seo.title !== 'string' || typeof c.seo.description !== 'string') errs.push('The site needs a search title and description.');
+  const str = (v: unknown) => typeof v === 'string';
+  const items = (v: unknown, keys: string[]) => Array.isArray(v) && v.length <= 24 && v.every((x) => x && typeof x === 'object' && keys.every((k) => str((x as Record<string, unknown>)[k])));
+  for (const p of c.pages || []) for (const s of (Array.isArray(p.sections) ? p.sections : []) as SiteSection[]) {
+    const ok = !!s && str(s.heading) && s.heading.trim().length > 0 && (
+      s.type === 'hero' ? str(s.text) && str(s.cta)
+      : s.type === 'about' || s.type === 'contact' ? str(s.text)
+      : s.type === 'features' ? items(s.items, ['title', 'text'])
+      : s.type === 'offers' ? items(s.items, ['name', 'text'])
+      : s.type === 'testimonials' ? items(s.items, ['quote', 'name'])
+      : s.type === 'faq' ? items(s.items, ['q', 'a'])
+      : false);
+    if (!ok) { errs.push(`A section on the ${p.title || 'home'} page is incomplete: every section needs a heading and its content.`); break; }
+  }
+  if (!(c.pages || []).some((p) => (p.sections || []).some((s) => s?.type === 'contact'))) errs.push('The site needs a way to contact the business.');
   return errs;
 }
