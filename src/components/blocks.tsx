@@ -1,5 +1,6 @@
 // Larger shared pieces from the owner's approved phone design: hub titles, segmented tabs, list rows and the blue plan card.
-import React from 'react';
+import React, { useRef } from 'react';
+import { useSlidingDrop } from '../lib/liquid';
 import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { Duo, IconBadge, type Hue } from './icons';
@@ -11,14 +12,19 @@ export const HubHeader: React.FC<{ title: string; lead: string; action?: React.R
   </header>
 );
 
-/** Segmented tabs: one selected (filled blue), the rest quiet. Scrolls sideways on narrow phones instead of squeezing. */
+/** Segmented tabs (Frontend Skills §33.2): one capsule track with a single drop that glides under the choice; the chosen
+ *  label shows in the accent, at the same weight, so nothing shifts. Inside a scrolling page it gets the rim, no filter.
+ *  Scrolls sideways on narrow phones instead of squeezing. */
 export function Segmented<T extends string>({ value, onChange, options, label }: { value: T; onChange: (v: T) => void; options: { v: T; l: string }[]; label: string }) {
+  const track = useRef<HTMLDivElement>(null);
+  const drop = useSlidingDrop<HTMLSpanElement>(track, '[aria-selected="true"]', value);
   return (
     <div className="-mx-4 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0">
-      <div className="inline-flex min-w-full rounded-control bg-ink/[0.05] p-1 sm:min-w-0" role="tablist" aria-label={label}>
+      <div ref={track} className="seg-track relative inline-flex min-w-full rounded-control p-1 sm:min-w-0" role="tablist" aria-label={label}>
+        <span ref={drop} className="seg-drop absolute left-0 top-0 rounded-control" style={{ opacity: 0 }} aria-hidden="true" />
         {options.map((o) => (
           <button key={o.v} role="tab" aria-selected={value === o.v} onClick={() => onChange(o.v)}
-            className={`min-h-[40px] flex-1 whitespace-nowrap rounded-control px-5 text-[14px] font-semibold transition-[background-color,color,box-shadow] duration-200 ${value === o.v ? 'bg-accent text-white shadow-[0_6px_16px_-8px_rgba(31,107,255,0.8)]' : 'text-ink hover:bg-ink/5'}`}>{o.l}</button>
+            className={`relative min-h-[40px] flex-1 whitespace-nowrap rounded-control px-5 text-[14px] font-semibold transition-colors duration-300 ${value === o.v ? 'text-accent-ink' : 'text-ink/80 hover:text-ink'}`}>{o.l}</button>
         ))}
       </div>
     </div>

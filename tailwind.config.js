@@ -8,7 +8,7 @@ export default {
     extend: {
       fontFamily: { sans: ['"Inter Variable"', 'Inter', 'system-ui', 'sans-serif'] },
       colors: {
-        page: v('page'), surface: v('surface'), raised: v('raised'), line: v('line'),
+        page: v('page'), surface: v('surface'), raised: v('raised'), 'raised-2': v('raised-2'), line: v('line'),
         ink: v('ink'), muted: v('muted'), faint: v('faint'),
         accent: v('accent'), 'accent-ink': v('accent-ink'), 'on-accent': v('on-accent'),
         good: v('good'), warn: v('warn'), bad: v('bad'),

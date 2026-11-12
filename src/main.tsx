@@ -1,3 +1,4 @@
+import { detectRefraction } from './lib/liquid';
 import React, { lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, createRoutesFromElements, Navigate, Outlet, Route, RouterProvider } from 'react-router-dom';
@@ -68,6 +69,7 @@ const router = createBrowserRouter(createRoutesFromElements(
     </Route>,
 ), { basename: import.meta.env.BASE_URL.replace(/\/$/, '') || '/' });
 
+detectRefraction();
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <RouterProvider router={router} />

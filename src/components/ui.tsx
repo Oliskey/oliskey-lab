@@ -121,7 +121,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       {children}
       <div className="pointer-events-none fixed inset-x-0 top-3 z-[60] flex flex-col items-center gap-2 px-4" role="status" aria-live="polite">
         {list.map((t) => (
-          <div key={t.id} className="glass enter pointer-events-auto flex max-w-md items-center gap-2.5 rounded-control px-4 py-2.5 text-small font-medium text-ink">
+          <div key={t.id} className="glass-toast enter pointer-events-auto flex max-w-md items-center gap-2.5 rounded-control px-4 py-2.5 text-small font-medium text-ink">
             {t.tone === 'good' ? <CheckCircle2 className="h-5 w-5 shrink-0 text-good" aria-hidden="true" /> : <AlertCircle className="h-5 w-5 shrink-0 text-bad" aria-hidden="true" />}{t.text}
           </div>
         ))}

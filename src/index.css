@@ -9,15 +9,18 @@
   --accent: 31 107 255; --accent-ink: 21 88 224; --on-accent: 255 255 255;
   --primary-bg: 31 107 255; --primary-ink: 255 255 255;
   --good: 10 132 73; --warn: 180 83 9; --bad: 225 29 72;
-  --glass: 255 255 255; --glass-alpha: 0.78; --glass-edge: 255 255 255; --shadow: 10 26 58;
+  --glass: 255 255 255; --glass-alpha: 0.78; --glass-edge: 255 255 255; --shadow: 10 26 58; --raised-2: 244 245 248;
 }
+/* Dark is designed, not inverted (Frontend Skills §35.2): pure black page, depth from lighter surfaces, a hairline on
+ * every card, brighter accents. Measured: muted #A0A0A8 = 8.3:1 on black and 7.4:1 on cards; faint #8C8C96 = 6.0:1. */
 .dark {
-  --page: 5 11 26; --surface: 11 21 44; --raised: 15 28 56; --line: 31 45 78;
-  --ink: 255 255 255; --muted: 172 184 212; --faint: 140 154 186;
-  --accent: 76 141 255; --accent-ink: 128 172 255; --on-accent: 255 255 255;
-  --primary-bg: 255 255 255; --primary-ink: 10 26 58;
-  --good: 52 211 153; --warn: 251 191 36; --bad: 251 113 133;
-  --glass: 12 22 46; --glass-alpha: 0.72; --glass-edge: 255 255 255; --shadow: 0 0 0;
+  --page: 0 0 0; --surface: 0 0 0; --raised: 14 14 16; --raised-2: 26 26 29; --line: 38 38 42;
+  --ink: 255 255 255; --muted: 160 160 168; --faint: 140 140 150;
+  --accent: 77 148 255; --accent-ink: 128 178 255; --on-accent: 255 255 255;
+  --primary-bg: 255 255 255; --primary-ink: 0 0 0;
+  --good: 0 210 122; --warn: 245 185 66; --bad: 255 61 90;
+  --glass: 24 24 28; --glass-alpha: 0.72; --glass-edge: 255 255 255; --shadow: 0 0 0;
+  color-scheme: dark;
 }
 html { -webkit-text-size-adjust: 100%; text-rendering: optimizeLegibility; }
 body { @apply bg-page text-ink font-sans antialiased; font-feature-settings: 'cv11', 'ss01'; }
@@ -48,14 +51,100 @@ body { @apply bg-page text-ink font-sans antialiased; font-feature-settings: 'cv
   .chip[aria-pressed='true'] { @apply border-accent bg-accent/10 text-accent-ink; }
 
   .panel { @apply rounded-[20px] bg-raised; box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 0 0 1px rgb(var(--line) / 0.75), 0 14px 32px -22px rgb(var(--shadow) / 0.45); }
-  .dark .panel { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05), 0 0 0 1px rgb(var(--line)), 0 14px 32px -22px rgb(0 0 0 / 0.6); }
+  .dark .panel { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 0 0 1px rgb(var(--line)); }
+  .dark .input { background: rgb(var(--raised-2)); }
+  .dark .btn-secondary, .dark .chip { background: rgb(var(--raised-2)); }
   /* premium card: soft white with a hairline, an inner top light and a deep soft shadow (owner's approved look) */
   .card { @apply rounded-[20px] bg-raised; background-image: linear-gradient(180deg, rgb(var(--raised)) 0%, rgb(var(--surface) / 0.55) 100%);
     box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 0 0 1px rgb(var(--line) / 0.75), 0 14px 32px -22px rgb(var(--shadow) / 0.45); }
-  .dark .card { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05), 0 0 0 1px rgb(var(--line)), 0 14px 32px -22px rgb(0 0 0 / 0.6); }
-  .glass { background: rgb(var(--glass) / var(--glass-alpha)); -webkit-backdrop-filter: blur(18px) saturate(1.6); backdrop-filter: blur(18px) saturate(1.6); box-shadow: inset 0 1px 0 rgb(var(--glass-edge) / 0.35), inset 0 0 0 1px rgb(var(--glass-edge) / 0.10), 0 10px 30px -14px rgb(var(--shadow) / 0.35); }
+  .dark .card { background-image: linear-gradient(180deg, rgb(255 255 255 / 0.025), transparent 60%); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 0 0 1px rgb(var(--line)); }
+  .glass-toast { background: rgb(var(--glass) / var(--glass-alpha)); -webkit-backdrop-filter: blur(18px) saturate(1.6); backdrop-filter: blur(18px) saturate(1.6); box-shadow: inset 0 1px 0 rgb(var(--glass-edge) / 0.35), inset 0 0 0 1px rgb(var(--glass-edge) / 0.10), 0 10px 30px -14px rgb(var(--shadow) / 0.35); }
   .skeleton { @apply animate-pulse rounded-field bg-ink/[0.06]; }
 }
 @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 .enter { animation: rise 260ms cubic-bezier(0.32,0.72,0,1) both; }
 @media (prefers-reduced-motion: reduce) { .enter, .skeleton { animation: none; } * { scroll-behavior: auto !important; } }
+
+/* Autofill: style it, or browsers paint inputs pale yellow on black. */
+.dark input:-webkit-autofill { -webkit-text-fill-color: #fff; -webkit-box-shadow: 0 0 0 40px rgb(26 26 29) inset; caret-color: #fff; }
+
+/* ───────────────── Liquid Glass (Frontend Skills §31, §33.3, §34, §35.3) ─────────────────
+ * Real liquid, not frost: near-clear body, ~2px blur, a true edge bend (SVG displacement map set by useLiquidGlass,
+ * Chromium only), a thin rim with two glints, and a faint chromatic fringe. Three sibling layers: empty glass,
+ * the selected drop, then icons and labels on top — never a drop nested inside glass. */
+:root {
+  --lg-fill-hi: rgb(255 255 255 / 0.50); --lg-fill: rgb(255 255 255 / 0.36); --lg-fill-lo: rgb(255 255 255 / 0.42);
+  --lg-rim-1: rgb(255 255 255 / 0.95); --lg-rim-2: rgb(255 255 255 / 0.25); --lg-rim-3: rgb(255 255 255 / 0.75);
+  --lg-glint: rgb(255 255 255 / 1); --lg-shadow: 0 14px 34px -14px rgb(10 26 58 / 0.32), 0 2px 6px -2px rgb(10 26 58 / 0.10);
+  --lg-hair: rgb(10 26 58 / 0.08); --lg-fringe-c: rgb(0 200 255 / 0.40); --lg-fringe-m: rgb(255 60 200 / 0.35);
+  --lg-blur: 2px; --lg-saturate: 185%; --lg-bright: 1.05; --lg-rim-opacity: 0.55;
+  --glass-filter: blur(8px) saturate(185%) brightness(1.05);
+  --lens-fill: rgb(10 26 58 / 0.085); --lens-rim: rgb(255 255 255 / 0.9);
+  --glass-ink-c: rgb(255 255 255 / 0.9);
+}
+.dark {
+  --lg-fill-hi: rgb(40 40 46 / 0.42); --lg-fill: rgb(24 24 28 / 0.32); --lg-fill-lo: rgb(18 18 22 / 0.40);
+  --lg-rim-1: rgb(255 255 255 / 0.34); --lg-rim-2: rgb(255 255 255 / 0.06); --lg-rim-3: rgb(255 255 255 / 0.22);
+  --lg-glint: rgb(210 245 255 / 0.85); --lg-shadow: 0 14px 34px -12px rgb(0 0 0 / 0.85);
+  --lg-hair: rgb(255 255 255 / 0.10); --lg-fringe-c: rgb(0 200 255 / 0.30); --lg-fringe-m: rgb(255 60 200 / 0.26);
+  --lg-bright: 1.02; --lg-rim-opacity: 0.38;
+  --glass-filter: blur(8px) saturate(170%) brightness(1.0);
+  --lens-fill: rgb(255 255 255 / 0.13); --lens-rim: rgb(255 255 255 / 0.22);
+  --glass-ink-c: rgb(0 0 0 / 0.8);
+}
+.lg {
+  position: absolute; border-radius: 999px; isolation: isolate;
+  background: linear-gradient(180deg, var(--lg-fill-hi) 0%, var(--lg-fill) 50%, var(--lg-fill-lo) 100%);
+  -webkit-backdrop-filter: var(--glass-filter); backdrop-filter: var(--glass-filter);
+  box-shadow: inset 2px 0 3px -2px var(--lg-fringe-c), inset -2px 0 3px -2px var(--lg-fringe-m), inset 0 -1px 8px -4px rgb(255 255 255 / 0.16), 0 0 0 0.5px var(--lg-hair), var(--lg-shadow);
+}
+/* thin top-bright ring masked to the edge, with two glints (top-left white, bottom-right ~75%) */
+.lg::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.25px; pointer-events: none;
+  background:
+    radial-gradient(28px 14px at 22% 0%, var(--lg-glint), transparent 70%),
+    radial-gradient(26px 12px at 80% 100%, color-mix(in srgb, var(--lg-glint) 75%, transparent), transparent 70%),
+    linear-gradient(180deg, var(--lg-rim-1), var(--lg-rim-2) 45%, var(--lg-rim-3));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+/* rim-light map made for this element's exact size (useLiquidGlass) */
+.lg::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: var(--lg-rim-light, none) center / 100% 100% no-repeat; opacity: var(--lg-rim-opacity); }
+/* the selected drop: neutral glass with a symmetric rim (small drops must not look like an offset second circle) */
+.lg-lens {
+  position: absolute; border-radius: 999px; background: var(--lens-fill);
+  box-shadow: inset 0 0 0 1px var(--lens-rim), inset 0 1px 0 rgb(255 255 255 / 0.55), inset 0 -6px 10px -8px rgb(255 255 255 / 0.5);
+}
+.dark .lg-lens { box-shadow: inset 0 0 0 1px var(--lens-rim), inset 0 1px 0 rgb(255 255 255 / 0.25), inset 0 -6px 10px -8px rgb(255 255 255 / 0.18); }
+/* the vivid accent drop of the rail and sidebar (§33.5) */
+.lg-accent {
+  position: absolute; border-radius: 18px; color: #fff;
+  background: linear-gradient(165deg, rgb(92 152 255), rgb(31 107 255)) padding-box, linear-gradient(180deg, rgb(255 255 255 / 0.7), rgb(255 255 255 / 0.1) 50%, rgb(255 255 255 / 0.45)) border-box;
+  border: 1px solid transparent;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.35), inset 0 -8px 14px -10px rgb(255 255 255 / 0.4), 0 10px 22px -10px rgb(31 107 255 / 0.75);
+}
+/* while glass moves or changes size: light filter, no rim image (a stretched rim flashes) */
+[data-moving] .lg { -webkit-backdrop-filter: blur(6px) saturate(170%) !important; backdrop-filter: blur(6px) saturate(170%) !important; }
+[data-moving] .lg::after { opacity: 0; }
+/* labels and icons on near-clear glass: a tight halo, full-strength ink */
+.glass-ink { text-shadow: 0 0 1px var(--glass-ink-c), 0 0 6px color-mix(in srgb, var(--glass-ink-c) 50%, transparent); }
+.glass-ink svg { filter: drop-shadow(0 0 1.5px var(--glass-ink-c)); }
+/* the liquid layer behind the glass: shapes fuse and pinch off through the gooey filter (§33.3 "LIQUID JOIN") */
+.lg-goo { position: absolute; inset: -30px; filter: url(#lg-goo); pointer-events: none; }
+.lg-goo > i { position: absolute; display: block; border-radius: 999px; background: rgb(255 255 255 / 0.9); }
+.dark .lg-goo > i { background: rgb(46 46 54 / 0.95); }
+@media (prefers-reduced-transparency: reduce) {
+  .lg { background: rgb(var(--raised)); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .lg::after { display: none; }
+}
+@media (prefers-contrast: more) { .lg { background: rgb(var(--raised)); box-shadow: 0 0 0 2px rgb(var(--ink)); -webkit-backdrop-filter: none; backdrop-filter: none; } }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .lg { background: rgb(var(--raised) / 0.96); } }
+/* navigation touch: Apple's quick press (0.96, 120ms); no hover effects, no wobble (owner) */
+.lg-item { transition: transform 120ms cubic-bezier(0.2,0.8,0.2,1); -webkit-tap-highlight-color: transparent; }
+.lg-item:active { transform: scale(0.96); }
+@media (prefers-reduced-motion: reduce) { .lg-item:active { transform: none; } }
+/* segmented track and its drop: rim light, no backdrop filter (it sits in the scrolling page) */
+.seg-track { background: rgb(var(--ink) / 0.055); box-shadow: inset 0 0 0 0.5px rgb(var(--ink) / 0.06); }
+.seg-drop { background: rgb(255 255 255); box-shadow: inset 0 0 0 0.5px rgb(10 26 58 / 0.06), inset 0 1px 0 #fff, 0 4px 12px -4px rgb(10 26 58 / 0.22), 0 1px 2px rgb(10 26 58 / 0.08); }
+.dark .seg-track { background: rgb(var(--raised)); box-shadow: inset 0 0 0 1px rgb(var(--line)); }
+.dark .seg-drop { background: linear-gradient(180deg, rgb(48 48 54), rgb(34 34 39)); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.10), inset 0 1px 0 rgb(255 255 255 / 0.16), 0 4px 12px -4px rgb(0 0 0 / 0.8); }
